@@ -6,6 +6,11 @@
  */
 
 import controller.*;
+import controller.recordable.Paste;
+import controller.recordable.Copy;
+import controller.recordable.Cut;
+import controller.recordable.Insert;
+import controller.recordable.Select;
 import view.HMI;
 import view.HMIInterface;
 import model.Core;
