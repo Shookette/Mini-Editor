@@ -1,0 +1,20 @@
+package controller;
+
+import view.HMI;
+import model.Core;
+
+public class Copy implements Command{
+
+	private Core c;
+	private HMI h;
+	
+	public Copy(Core c, HMI h) {
+		this.c = c;
+		this.h = h;
+	}
+
+	@Override
+	public void execute(){
+		c.copy();
+	}
+}

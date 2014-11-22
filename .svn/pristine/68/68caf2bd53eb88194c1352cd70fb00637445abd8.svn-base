@@ -1,0 +1,33 @@
+import controller.*;
+import view.HMI;
+import model.Core;
+
+
+public class Editor {
+
+	public static void main(String[] args) {
+		//Declare and init model
+		Core core = new Core();
+		
+		//Create view with controller
+		HMI hmi = new HMI();
+		
+		//Create controller with the model
+		Command insert = new Insert(core,hmi);
+		Command select = new Select(core,hmi);
+		Command copy = new Copy(core,hmi);
+		Command cut = new Cut(core,hmi);
+		Command paste = new Paste(core,hmi);
+		
+		//Bind command in hmi
+		hmi.setCommand(0, insert, "Insert");
+		hmi.setCommand(1, select, "Select");
+		hmi.setCommand(2, copy, "Copy");
+		hmi.setCommand(3, cut, "Cut");
+		hmi.setCommand(4, paste, "Paste");
+		
+		//Add view as observer of model
+		core.addObserver(hmi);
+		
+	}
+}

@@ -1,0 +1,37 @@
+/**
+ * @author Anne-Sophie Balestra
+ * @author Jérémy Viallatte
+ * 
+ * @version 1.0
+ */
+
+package model;
+
+public class ClipBoard {
+	
+	private String content;
+	
+	/**
+	 * clipboard constructor.
+	 * Init content to null;
+	 */
+	public ClipBoard() {
+		content = "";
+	}
+	
+	/**
+	 * Set clipBoard content
+	 * @param String text content
+	 */
+	public void setContent(String text) {
+		content = text;
+	}
+	
+	/**
+	 * Get clipBoard content
+	 * @return String content
+	 */
+	public String getContent() {
+		return this.content;
+	}
+}

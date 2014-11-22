@@ -1,0 +1,46 @@
+package model;
+
+public class Selection {
+
+	private Position start;
+	private Position end;
+	
+	/**
+	 * Selection Constructor
+	 * Init Selection with start and end value to zero
+	 */
+	public Selection () {
+		start = new Position(0);
+		end = new Position(0);
+	}
+	
+	/**
+	 * Set selection with start and end value
+	 * @param start int position
+	 * @param end int position
+	 */
+	public void setSelection(int start, int end) {
+		this.start.setPosition(start);
+		this.end.setPosition(end);
+	}
+	
+	/**
+	 * Get selection (start and end position)
+	 * @return Int[] array with start and end position
+	 */
+	public int[] getSelection() {
+		int[] result = new int[2];
+		result[0] = this.start.getPosition();
+		result[1] = this.end.getPosition();
+		return result;		
+	}
+	
+	/**
+	 * Return a string from the position
+	 */
+	public String toString() {
+		return "Start : "+start.getPosition()+"\nEnd : "+end.getPosition();
+	}
+	
+	
+}

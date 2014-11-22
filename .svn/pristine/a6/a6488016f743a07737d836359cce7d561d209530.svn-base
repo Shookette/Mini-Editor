@@ -1,0 +1,15 @@
+package controller;
+
+/**
+ * 
+ * @author Viallatte Jérémy & Balestra Anne-Sophie
+ *
+ */
+public interface Command {
+
+	/**
+	 * 
+	 */
+	public void execute();
+	
+}

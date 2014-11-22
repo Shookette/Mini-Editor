@@ -1,0 +1,21 @@
+package controller;
+
+import view.HMI;
+import model.Core;
+
+public class Cut implements Command{
+
+	private Core c;
+	private HMI h;
+	
+	public Cut(Core c, HMI h) {
+		this.c = c;
+		this.h = h;
+	}
+	
+	@Override
+	public void execute() {
+		c.cut();
+	}
+
+}

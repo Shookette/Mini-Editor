@@ -1,0 +1,14 @@
+/**
+ * @author Anne-Sophie Balestra
+ * @author Jérémy Viallatte
+ * 
+ * @version 1.0
+ */
+
+package view;
+
+import observer.Observer;
+
+public interface HMIInterface extends Observer{
+	
+}

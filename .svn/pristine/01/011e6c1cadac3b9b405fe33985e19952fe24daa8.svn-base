@@ -1,0 +1,65 @@
+/**
+ * @author Anne-Sophie Balestra
+ * @author Jérémy Viallatte
+ * 
+ * @version 1.0
+ */
+
+package model;
+
+public class Buffer {
+
+	private StringBuffer text;
+	
+	public Buffer() {
+		text = new StringBuffer();
+	}
+	
+	/**
+	 * Function used into insert function
+	 * append (insert in the end) screenIn text in buffer
+	 * @param String text
+	 */
+	public void append(String text) {
+		this.text.append(text);
+	}
+	
+	/**
+	 * Get text in String from the StringBuffer
+	 * @return String text in the buffer
+	 */
+	public String getText() {
+		return this.text.toString();
+	}
+	
+	/**
+	 * Return string selected from start to end
+	 * @param int start of the selection
+	 * @param int end of the selection
+	 * @return String selection
+	 */
+	public String getSelection(int start, int end) {
+		return text.substring(start, end);
+	}
+	
+	/**
+	 * Return string selected from start to end and delete the selection afterwards
+	 * @param int start
+	 * @param int end
+	 * @return String selection
+	 */
+	public String cutBuffer(int start, int end) {
+		String result = getSelection(start, end);
+		text.delete(start, end);
+		return result;
+	}
+	
+	/**
+	 * Paste the clipboard in buffer from start position to end position
+	 * @param int[] pos contains start and end position of selection
+	 * @param String clipBoard contains content of the clipboard
+	 */
+	public void pasteSelection(int[] pos, String clipBoard) {
+		text.replace(pos[0], pos[1], clipBoard);
+	}
+}

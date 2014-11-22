@@ -1,0 +1,21 @@
+package controller;
+
+import view.HMI;
+import model.Core;
+
+public class Paste implements Command{
+
+	private Core c;
+	private HMI h;
+	
+	public Paste(Core c, HMI h) {
+		this.c = c;
+		this.h = h;
+	}
+	
+	@Override
+	public void execute() {
+		c.paste();
+	}
+
+}

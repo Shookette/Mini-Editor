@@ -1,0 +1,24 @@
+package controller;
+
+import view.HMI;
+import model.Core;
+
+public class Select implements Command{
+
+	private Core c;
+	private HMI h;
+	
+	public Select(Core c, HMI h) {
+		this.c = c;
+		this.h = h;
+	}
+	
+	@Override
+	public void execute() {
+		//get Position of screenOut
+		int[] pos = h.getPosition();
+		h.highlightSelection(pos);
+		c.select(pos);
+	}
+
+}

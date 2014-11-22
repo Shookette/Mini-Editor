@@ -1,0 +1,24 @@
+package controller;
+
+import view.HMI;
+import model.Core;
+
+public class Insert implements Command{
+
+	private Core c;
+	private HMI h;
+	
+	public Insert(Core c, HMI h) {
+		this.c = c;
+		this.h = h;
+	}
+	
+	@Override
+	public void execute() {
+		String txt = h.getScreenInText();
+		h.resetScreenIn();
+		c.insert(txt);
+		
+	}
+
+}

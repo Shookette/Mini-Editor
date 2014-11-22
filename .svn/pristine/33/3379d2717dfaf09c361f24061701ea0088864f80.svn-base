@@ -1,0 +1,141 @@
+/**
+ * @author Anne-Sophie Balestra
+ * @author Jérémy Viallatte
+ * 
+ * @version 1.0
+ */
+
+package JUnit;
+
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+import model.Core;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+@RunWith(Parameterized.class)
+public class CoreTest {
+
+	private final Core core;
+	
+	public CoreTest(final String b, final int[] p, final String c) {
+		this.core = new Core(b,p,c);
+	}
+	
+	@Parameters
+	public static Collection<Object[]> parameters()
+	{
+		return Arrays.asList(new Object[][]{
+			{"",new int[]{0,0},""},
+			{"test",new int[]{4,4},""},
+			{"heello",new int[]{2,4},"lo"}
+		});
+	}
+	
+	/**
+	 * tests function to insert text into buffer
+	 * @prerequisite text given in parameters can't be empty
+	 * @postrequisite buffer = buffer + text in parameters 
+	 */
+	@Test
+	public void testInsert() {
+		// Insertion string
+		String insertion = "String";
+		// Get all data before testing
+		String bufferPreTest = this.core.getBuffer().getText();
+		int[] selectionPreTest = this.core.getSelection().getSelection();
+		String clipBoardPreTest = this.core.getClipBoard().getContent();
+		// Execute insert command with insertion variable
+		this.core.insert(insertion);
+		// Test
+		assertEquals("The buffer content is different than the excepted result", bufferPreTest.substring(0, selectionPreTest[0])+insertion+bufferPreTest.substring(selectionPreTest[1]), this.core.getBuffer().getText());
+		assertEquals("The start position of the selection isn't the excepted position",selectionPreTest[0]+insertion.length(), this.core.getSelection().getSelection()[0]);
+		assertEquals("The end position of the selection isn't the excepted position",selectionPreTest[0]+insertion.length(), this.core.getSelection().getSelection()[1]);
+		assertEquals("The clipboard has changed during the test simulation", clipBoardPreTest, this.core.getClipBoard().getContent());				
+	}
+
+	/**
+	 * tests function to select text in buffer
+	 * @prerequisite start position <= end position
+	 * @prerequisite end position <= buffer length (implies that start position <= buffer length too)
+	 * @prerequisite start position and end position >= 0
+	 * @postrequisite start and end position are defined in Selection of Core
+	 */
+	@Test
+	public void testSelect() {
+		//
+		int[] selection = new int[2];
+		selection[0] = 2;
+		selection[1] = 5;
+		// Get all data before testing
+		String bufferPreTest = this.core.getBuffer().getText();
+		String clipBoardPreTest = this.core.getClipBoard().getContent();
+		// Execute insert command with insertion variable
+		this.core.select(selection);
+		// Test buffer and clip board
+		assertEquals("The buffer content has changed during the test simulation", bufferPreTest, this.core.getBuffer().getText());
+		assertEquals("The clipboard has changed during the test simulation", clipBoardPreTest, this.core.getClipBoard().getContent());				
+		// Test start position
+		if (selection[0] > bufferPreTest.length()) {
+			assertEquals("The start position of the selection isn't the excepted position",bufferPreTest.length(), this.core.getSelection().getSelection()[0]);
+		} else if (selection[0] < 0 ){
+			assertEquals("The start position of the selection isn't the excepted position",0, this.core.getSelection().getSelection()[0]);
+		} else {
+			assertEquals("The start position of the selection isn't the excepted position",selection[0], this.core.getSelection().getSelection()[0]);
+		}
+		// Test end position
+		if (selection[1] < selection[0]) {
+			assertEquals("The end position of the selection isn't the excepted position",selection[0], this.core.getSelection().getSelection()[1]);
+		} else if (selection[1] > bufferPreTest.length()) {
+			assertEquals("The end position of the selection isn't the excepted position",bufferPreTest.length(), this.core.getSelection().getSelection()[1]);
+		} else {
+			assertEquals("The end position of the selection isn't the excepted position",selection[1], this.core.getSelection().getSelection()[1]);
+		}
+	}
+
+	/**
+	 * tests function to copy text from buffer into clipboard
+	 * @prerequisite selection is defined
+	 * @prerequisite start position != end position (can't be just the cursor, i.e. text must be selected)
+	 * @postrequisite text between start & end still in buffer
+	 * @postrequisite text between start & end in clipboard
+	 * @postrequisite start & end position reset to end of buffer
+	 */
+	@Test
+	public void testCopy() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * tests function to cut text from buffer into clipboard
+	 * @prerequisite selection is defined
+	 * @prerequisite start position != end position (can't be just the cursor, i.e. text must be selected)
+	 * @postrequisite text between start & end not in buffer anymore
+	 * @postrequisite text between start & end in clipboard
+	 * @postrequisite indexes of characters in buffer are reordered
+	 * @postrequisite start & end position reset to end of buffer
+	 */
+	@Test
+	public void testCut() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * tests function to paste text from clipboard into buffer
+	 * @prerequisite selection is defined
+	 * @postrequisite text between start & end replaced by content in clipboard
+	 * @postrequisite indexes of characters in buffer are reordered
+	 * @postrequisite start & end position reset to end of buffer
+	 */
+	@Test
+	public void testPaste() {
+		fail("Not yet implemented");
+	}
+
+}

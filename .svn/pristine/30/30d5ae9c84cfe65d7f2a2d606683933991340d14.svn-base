@@ -1,0 +1,9 @@
+package view;
+
+import observer.Observer;
+
+public interface HMIInterface extends Observer{
+
+	void update(String str, String textAreaName);
+
+}

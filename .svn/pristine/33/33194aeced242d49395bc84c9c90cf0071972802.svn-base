@@ -1,0 +1,32 @@
+package model;
+
+public class Position {
+
+	private int pos;
+	
+	/**
+	 * Position Constructor
+	 * Init position with an absolute int param.
+	 * 
+	 * @param pos
+	 */
+	public Position(int pos){
+		this.pos = Math.abs(pos);
+	}
+	
+	/**
+	 * Set position
+	 * @param int pos
+	 */
+	public void setPosition(int pos) {
+		this.pos = Math.abs(pos);
+	}
+	
+	/**
+	 * Get position
+	 * @return int pos
+	 */
+	public int getPosition() {
+		return this.pos;
+	}
+}

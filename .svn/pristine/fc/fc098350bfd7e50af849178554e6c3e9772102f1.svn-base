@@ -1,0 +1,106 @@
+/**
+ * @author Anne-Sophie Balestra
+ * @author Jérémy Viallatte
+ * 
+ * @version 1.0
+ */
+
+package JUnit;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+@RunWith(Parameterized.class)
+public class CoreTest {
+
+	/**
+	 * 
+	 */
+	@Parameters
+	public static void parameters()
+	{
+	}
+
+	/**
+	 * 
+	 */
+	@Before
+	public void initialize() throws Exception
+	{
+		try
+		{
+		}
+		catch(Exception e)
+		{
+			fail();
+		}
+		
+	}
+
+	/**
+	 * tests function to insert text into buffer
+	 * @prerequisite text given in parameters can't be empty
+	 * @postrequisite buffer = buffer + text in parameters 
+	 */
+	@Test
+	public void testInsert() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * tests function to select text in buffer
+	 * @prerequisite start position <= end position
+	 * @prerequisite end position <= buffer length (implies that start position <= buffer length too)
+	 * @prerequisite start position and end position >= 0
+	 * @postrequisite start and end position are defined in Selection of Core
+	 */
+	@Test
+	public void testSelect() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * tests function to copy text from buffer into clipboard
+	 * @prerequisite selection is defined
+	 * @prerequisite start position != end position (can't be just the cursor, i.e. text must be selected)
+	 * @postrequisite text between start & end still in buffer
+	 * @postrequisite text between start & end in clipboard
+	 * @postrequisite start & end position reset to end of buffer
+	 */
+	@Test
+	public void testCopy() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * tests function to cut text from buffer into clipboard
+	 * @prerequisite selection is defined
+	 * @prerequisite start position != end position (can't be just the cursor, i.e. text must be selected)
+	 * @postrequisite text between start & end not in buffer anymore
+	 * @postrequisite text between start & end in clipboard
+	 * @postrequisite indexes of characters in buffer are reordered
+	 * @postrequisite start & end position reset to end of buffer
+	 */
+	@Test
+	public void testCut() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * tests function to paste text from clipboard into buffer
+	 * @prerequisite selection is defined
+	 * @postrequisite text between start & end replaced by content in clipboard
+	 * @postrequisite indexes of characters in buffer are reordered
+	 * @postrequisite start & end position reset to end of buffer
+	 */
+	@Test
+	public void testPaste() {
+		fail("Not yet implemented");
+	}
+}

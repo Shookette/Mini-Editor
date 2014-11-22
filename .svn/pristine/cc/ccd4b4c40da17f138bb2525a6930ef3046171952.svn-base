@@ -1,0 +1,163 @@
+/**
+ * @author Anne-Sophie Balestra
+ * @author Jérémy Viallatte
+ * 
+ * @version 1.0
+ */
+
+package model;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import observer.Observer;
+
+public class Core implements CoreInterface{
+
+	private Buffer buffer = new Buffer();
+	private Selection selection = new Selection();
+	private ClipBoard clipBoard = new ClipBoard();
+	private ArrayList<Observer> listObserver = new ArrayList<Observer>();
+	
+	
+	/**
+	 * Add an observer to the listObserver
+	 */
+	@Override
+	public void addObserver(Observer obs) {
+		this.listObserver.add(obs);
+		
+	}
+
+	/**
+	 * Clear the listObserver/remove observers from the list
+	 */
+	@Override
+	public void removeObserver() {
+		this.listObserver.clear();		
+	}
+
+	/**
+	 * Notify All the observer with String text
+	 * @param String str text to pass to the observer (HMI)
+	 * @param String textAreaName name of the textarea to put str in
+	 */
+	@Override
+	public void notifyObserver(String str,String textAreaName) {
+		//Create an iterator on the list of observers
+		Iterator<Observer> it = listObserver.iterator();
+
+		//update each with the text we want
+		while (it.hasNext()) {
+			it.next().update(str,textAreaName);
+		}
+	}
+	
+	/**
+	 * Change the selection (start and end positions) to the end of the buffer
+	 */
+	public void changeSelection() {
+		//create a new table with start and end positions
+		int[] newPos = new int[2];
+		//initialize both of them to the end of the buffer
+		newPos[0] = buffer.getText().length();
+		newPos[1] = buffer.getText().length();
+		//change the selection to the end of the buffer
+		select(newPos);
+	}
+
+	/**
+	 * Insert Function
+	 * Insert text in the buffer then modify screenOut with notify
+	 * @param String txt text to insert into the buffer
+	 */
+	@Override
+	public void insert(String txt) {
+		//Verify that txt isn't null
+		if (!txt.equals("")) {
+			System.out.println("insert");
+			//Add text to buffer
+			buffer.append(txt);
+			//Notify all observers that buffer has changed
+			notifyObserver(buffer.getText(),"screenOut");
+			
+			//change selection to last character in buffer
+			changeSelection();
+		}
+	}
+	
+	/**
+	 * Select Function.
+	 * Get the position of the selection
+	 * @param int[] pos contains start and end position for the selection
+	 */
+	@Override
+	public void select(int[] pos) {
+		System.out.println("select");
+		//set the selection to the positions we got in the parameters
+		selection.setSelection(pos[0], pos[1]);
+		//display the result in the selection textarea
+		notifyObserver(selection.toString(),"selectArea");
+	}
+	
+	/**
+	 * Copy Function.
+	 * Get the text selected in the buffer then copy it in the clipboard
+	 */
+	@Override
+	public void copy() {
+		// If start < end then copy buffer selection in clipboard
+		int[] select = selection.getSelection();
+		if (select[0] < select[1]) {
+			System.out.println("copy");
+			//fetch the text inside the selection
+			String copy = buffer.getSelection(select[0], select[1]);
+			System.out.println("copy content : "+copy);
+			//copy this text in the clipboard
+			clipBoard.setContent(copy);
+			notifyObserver(copy, "clipBoardArea");
+		}
+	}
+
+	/**
+	 * Cut Function.
+	 * Get the text selected in the buffer then copy it in the clipboard
+	 * and delete the selected text from the buffer
+	 */
+	@Override
+	public void cut() {
+		int[] select = selection.getSelection();
+		//check that start < end position
+		if (select[0] < select[1]) {
+			System.out.println("cut");
+			// get the text selected and remove it from the buffer
+			String cut = buffer.cutBuffer(select[0], select[1]);
+			//copy it in the clipboard
+			clipBoard.setContent(cut);
+			notifyObserver(cut, "clipBoardArea");
+			//Notify all observers that buffer has changed
+			notifyObserver(buffer.getText(),"screenOut");
+			//change selection to last character in buffer
+			changeSelection();
+		}
+	}
+
+	/**
+	 * Paste Function.
+	 * Paste the clipboard at the position selected
+	 */
+	@Override
+	public void paste() {
+		//get the text in the clipboard
+		String cp = clipBoard.getContent();
+		//only if there is text in the clipboard
+		if(!cp.equals("")) {
+			System.out.println("paste");
+			//get the positions of the selection
+			int[] select = selection.getSelection();
+			//replace the selection with the text in the clipboard
+			buffer.pasteSelection(select,cp);
+			notifyObserver(buffer.getText(),"screenOut");
+		}
+	}
+}

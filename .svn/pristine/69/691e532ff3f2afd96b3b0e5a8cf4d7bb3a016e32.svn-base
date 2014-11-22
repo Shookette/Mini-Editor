@@ -1,0 +1,137 @@
+package model;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import observer.Observer;
+
+public class Core implements CoreInterface{
+
+	private Buffer buffer = new Buffer();
+	private Selection selection = new Selection();
+	private ClipBoard clipBoard = new ClipBoard();
+	private ArrayList<Observer> listObserver = new ArrayList<Observer>();
+	
+	
+	/**
+	 * Add an observer to the listObserver
+	 */
+	@Override
+	public void addObserver(Observer obs) {
+		this.listObserver.add(obs);
+		
+	}
+
+	/**
+	 * Clear the listObserver 
+	 */
+	@Override
+	public void removeObserver() {
+		this.listObserver.clear();		
+	}
+
+	/**
+	 * Notify All the observer with String text
+	 */
+	@Override
+	public void notifyObserver(String str,String textAreaName) {
+		Iterator<Observer> it = listObserver.iterator();
+		while (it.hasNext()) {
+			it.next().update(str,textAreaName);
+		}
+	}
+	
+	/**
+	 * Change the selection to the end of the buffer
+	 */
+	public void changeSelection() {
+		int[] newPos = new int[2];
+		newPos[0] = buffer.getText().length();
+		newPos[1] = buffer.getText().length();
+		select(newPos);
+	}
+
+	/**
+	 * Insert Function
+	 * Insert text in the buffer then modify screenOut with notify
+	 */
+	@Override
+	public void insert(String txt) {
+		//Verify that txt isn't null
+		if (!txt.equals("")) {
+			System.out.println("insert");
+			//Add text to buffer
+			buffer.append(txt);
+			//Notify all observers that buffer has changed
+			notifyObserver(buffer.getText(),"screenOut");
+			
+			//change selection to last character in buffer
+			changeSelection();
+		}
+	}
+	
+	/**
+	 * Select Function.
+	 * Get the position of the selection
+	 */
+	@Override
+	public void select(int[] pos) {
+		// TODO Auto-generated method stub
+		System.out.println("select");
+		selection.setSelection(pos[0], pos[1]);
+		notifyObserver(selection.toString(),"selectArea");
+	}
+	
+	/**
+	 * Copy Function.
+	 * Get the text selected in the buffer then copy it in the clipboard
+	 */
+	@Override
+	public void copy() {
+		// If start < end then copy buffer selection in clipboard
+		int[] select = selection.getSelection();
+		if (select[0] < select[1]) {
+			System.out.println("copy");
+			String copy = buffer.getSelection(select[0], select[1]);
+			System.out.println("copy content : "+copy);
+			clipBoard.setContent(copy);
+			notifyObserver(copy, "clipBoardArea");
+		}
+	}
+
+	/**
+	 * Cut Function.
+	 * Get the text selected in the buffer then copy it in the clipboard
+	 * and delete the selected text from the buffer
+	 */
+	@Override
+	public void cut() {
+		int[] select = selection.getSelection();
+		if (select[0] < select[1]) {
+			System.out.println("cut");
+			String cut = buffer.cutBuffer(select[0], select[1]);
+			clipBoard.setContent(cut);
+			notifyObserver(cut, "clipBoardArea");
+			//Notify all observers that buffer has changed
+			notifyObserver(buffer.getText(),"screenOut");
+			//change selection to last character in buffer
+			changeSelection();
+		}
+	}
+
+	/**
+	 * Paste Function.
+	 * Paste the clipboard at the position selected
+	 */
+	@Override
+	public void paste() {
+		String cp = clipBoard.getContent();
+		if(!cp.equals("")) {
+			System.out.println("paste");
+			int[] select = selection.getSelection();
+			buffer.pasteSelection(select,cp);
+			notifyObserver(buffer.getText(),"screenOut");
+		}
+	}
+
+}

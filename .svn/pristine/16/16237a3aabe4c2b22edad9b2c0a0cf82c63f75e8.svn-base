@@ -1,0 +1,105 @@
+package JUnit;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+@RunWith(Parameterized.class)
+public class CoreTest {
+
+	/**
+	 * 
+	 */
+	@Parameters
+	public static void parameters()
+	{
+	}
+
+	/**
+	 * 
+	 */
+	@Before
+	public void setUp() throws Exception
+	{
+		try
+		{
+		}
+		catch(Exception e)
+		{
+			fail();
+		}
+		
+	}
+
+	/**
+	 * tests function to insert text into buffer
+	 * prerequisites :
+	 * 	- have to be something written in the screenIn
+	 * postrequisites :
+	 * 	- screenIn is empty
+	 * 	- screenOut has buffer + what was in screenIn at the end
+	 * 	- "Insert" button is disabled
+	 */
+	@Test
+	public void testInsert() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * tests function to select text in buffer
+	 * prerequisites : 
+	 * 	- have to be something in screenOut(buffer) NOT SCREEN IN
+	 * 	- start selection must be smaller than end selection
+	 * 	- end selection must be smaller or equal to size of buffer 
+	 * 		(start selection too but already managed with previous prerequisite)
+	 * 	- start and end selection must be at least equal to 0
+	 * postrequisites :
+	 * 	- start and end Position in Selection are set + changed in HMI panOther
+	 * 	- selection highlighted in screenOut
+	 * 	- "Insert" button disabled
+	 * 	- screenIn disabled
+	 * 	- "Copy" and "Cut" buttons enabled
+	 * 	- "Paste" button enabled if clipboard not empty
+	 */
+	@Test
+	public void testSelect() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * tests function to copy text from buffer into clipboard
+	 * prerequisites :
+	 * 	- 
+	 * postrequisites :
+	 */
+	@Test
+	public void testCopy() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * tests function to cut text from buffer into clipboard
+	 * prerequisites :
+	 * postrequisites :
+	 */
+	@Test
+	public void testCut() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * tests function to paste text from clipboard into buffer
+	 * prerequisites :
+	 * postrequisites :
+	 */
+	@Test
+	public void testPaste() {
+		fail("Not yet implemented");
+	}
+
+}
