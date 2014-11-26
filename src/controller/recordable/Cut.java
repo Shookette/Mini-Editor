@@ -8,8 +8,11 @@
 package controller.recordable;
 
 import controller.MementoCommand;
+import controller.Recordable;
+import controller.memento.MementoCut;
 import view.HMIInterface;
 import model.CoreInterface;
+import model.RecorderInterface;
 
 /**
  * Implementation of Recordable Interface to call the cut function in the model(core)
@@ -19,27 +22,30 @@ public class Cut implements Recordable{
 	private CoreInterface c;
 	@SuppressWarnings("unused")
 	private HMIInterface h;
+	private RecorderInterface r;
+	private MementoCommand m;
 	
-	public Cut(CoreInterface c, HMIInterface h) {
+	public Cut(CoreInterface c, HMIInterface h , RecorderInterface r) {
 		this.c = c;
 		this.h = h;
+		this.r = r;
 	}
 	
 	@Override
 	public void execute() {
+		this.setMemento();
+		r.record(this);
 		c.cut();
 	}
 
 	@Override
 	public MementoCommand getMemento() {
-		// TODO Auto-generated method stub
-		return null;
+		return m;
 	}
 
 	@Override
 	public void setMemento() {
-		// TODO Auto-generated method stub
-		
+		this.m = new MementoCut(c);
 	}
 
 }

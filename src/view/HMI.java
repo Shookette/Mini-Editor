@@ -50,7 +50,8 @@ public class HMI extends JFrame implements HMIInterface{
 	private JTextArea clipBoardArea = new JTextArea();
 	
 	public HMI(){                
-		this.setSize(536, 474);
+//		this.setSize(536, 474);
+		this.setSize(536, 550);
 		this.setTitle("Editor");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
@@ -58,10 +59,10 @@ public class HMI extends JFrame implements HMIInterface{
 		this.setContentPane(container);
 		container.setLayout(null);
 		
-		panButton.setBounds(10, 11, 510, 64);
+		panButton.setBounds(10, 11, 510, 100);
 		container.add(panButton);
 		
-		panScreen.setBounds(10, 86, 337, 349);
+		panScreen.setBounds(10, 136, 337, 349);
 		container.add(panScreen);
 		panScreen.setLayout(null);
 		//the user won't be able to type in the screenOut, only select
@@ -83,13 +84,18 @@ public class HMI extends JFrame implements HMIInterface{
 				screenOut.getHighlighter().removeAllHighlights();
 			}
 		});
+		screenOut.setLineWrap(true);
+		screenOut.setWrapStyleWord(true);
 		panScreen.add(screenOut);
 		
 		screenIn.setBounds(10, 253, 317, 80);
 		screenIn.setBorder(BorderFactory.createLineBorder(Color.black));
+		
+		screenIn.setLineWrap(true);
+		screenIn.setWrapStyleWord(true);
 		panScreen.add(screenIn);
 		
-		panOther.setBounds(357, 86, 163, 349);
+		panOther.setBounds(357, 136, 163, 349);
 		container.add(panOther);
 		panOther.setLayout(null);
 		selectArea.setText("Start : 0\r\nEnd : 0");

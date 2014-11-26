@@ -1,7 +1,5 @@
-package controller.recordable;
+package controller;
 
-import controller.Command;
-import controller.MementoCommand;
 
 
 public interface Recordable extends Command{

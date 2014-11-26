@@ -8,8 +8,11 @@
 package controller.recordable;
 
 import controller.MementoCommand;
+import controller.Recordable;
+import controller.memento.MementoInsert;
 import view.HMIInterface;
 import model.CoreInterface;
+import model.RecorderInterface;
 
 /**
  * Implementation of Recordable Interface to call the insert function in the model(core)
@@ -18,30 +21,34 @@ public class Insert implements Recordable{
 
 	private CoreInterface c;
 	private HMIInterface h;
+	private RecorderInterface r;
+	private String txt;
+	private MementoCommand m;
 	
-	public Insert(CoreInterface c, HMIInterface h) {
+	public Insert(CoreInterface c, HMIInterface h, RecorderInterface r) {
 		this.c = c;
 		this.h = h;
+		this.r = r;
+		
 	}
 	
 	@Override
 	public void execute() {
-		String txt = h.getScreenInText();
+		this.txt = h.getScreenInText();
 		h.resetScreenIn();
+		this.setMemento();		
+		r.record(this);
 		c.insert(txt);
-		
 	}
 
 	@Override
 	public MementoCommand getMemento() {
-		// TODO Auto-generated method stub
-		return null;
+		return m;
 	}
 
 	@Override
 	public void setMemento() {
-		// TODO Auto-generated method stub
-		
+		this.m = new MementoInsert(c, this.txt);
 	}
 
 }
