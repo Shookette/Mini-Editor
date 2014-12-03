@@ -34,20 +34,26 @@ public class Recorder implements RecorderInterface {
 				MementoCommand m = it.next();
 				m.execute();
 				i++;
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {}
 			}	
 		}
 		
 	}
 	
 	public void start() {
+		this.listMemento.clear();
 		this.recording = true;
 	}
 	
 	public void stop() {
 		this.recording = false;
+	}
+	
+	public ArrayList<MementoCommand> getListMemento() {
+		return this.listMemento;
+	}
+	
+	public boolean getRecording() {
+		return this.recording;
 	}
 	
 }

@@ -9,29 +9,24 @@ import model.Core;
 import model.Recorder;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import controller.memento.MementoCopy;
-import controller.memento.MementoCut;
-import controller.memento.MementoPaste;
+import view.HMI;
+import controller.Recordable;
+import controller.recordable.Cut;
+import controller.recordable.Paste;
 
+@RunWith(Parameterized.class)
 public class RecorderTest {
-
 	
-
 	/**
 	 * Core variable for testing
 	 */
-	@SuppressWarnings("unused")
 	private final Recorder recorder;
 	private final Core core;
-	
-	MementoCopy mCopy = new MementoCopy(this.core);
-	MementoCut mCut = new MementoCut(this.core);
-	MementoPaste mPaste = new MementoPaste(this.core);
-	
-//	MementoInsert mInsert1 = new MementoInsert(this.core);
-
+	private final HMI hmi;
 	
 	/**
 	 * CoreTest constructor with parameter setting
@@ -40,8 +35,9 @@ public class RecorderTest {
 	 * @param c String content of clipboard
 	 */
 	public RecorderTest(final String b, final int[] p, final String c) {
-		this.recorder = new Recorder(/*list<MementoCommand>*/);
 		this.core = new Core(b,p,c);
+		this.recorder = new Recorder();
+		this.hmi = new HMI();
 	}
 	
 	/**
@@ -51,33 +47,95 @@ public class RecorderTest {
 	@Parameters
 	public static Collection<Object[]> parameters()
 	{
-		
-		//Objet contient > 1 list memento / 1 core avec 1 buffer / 1 selection / 1 presse papier
 		return Arrays.asList(new Object[][]{
-			{/*list*/Arrays.asList(""),"",new int[]{0,0},""},
-			{"test",new int[]{4,4},""},
-			{"heello",new int[]{2,4},"lo"},
-			{"",new int[]{4,2},"isn't"},
+			{"", new int[]{0,0}, ""},
+			{"test", new int[]{4,4}, ""},
+			{"heello", new int[]{2,4}, "lo"},
+			{"", new int[]{4,2}, "isn't"}
 		});
 	}
 	
 	@Test
 	public void testStart() {
-		fail("Not yet implemented");
+		//Beginning start test
+		assertEquals("Recording was already started before start command",false,this.recorder.getRecording());
+		this.recorder.start();
+		assertEquals("An insert wasn't done after the start like excepted",0,this.recorder.getListMemento().size());
+		assertEquals("Recording wasn't started after start command",true,this.recorder.getRecording());
 	}
 
 	@Test
 	public void testStop() {
-		fail("Not yet implemented");
+		//init memento
+		Recordable cut = new Cut(this.core, this.hmi, this.recorder);
+		Recordable paste = new Paste(this.core, this.hmi, this.recorder);
+
+		this.recorder.start();
+		this.recorder.record(cut);
+		assertEquals("An cut wasn't recorded after the start like excepted",1,this.recorder.getListMemento().size());
+		assertEquals("Recording wasn't started after start command",true,this.recorder.getRecording());
+	
+		this.recorder.stop();
+		this.recorder.record(paste);
+		assertEquals("Recording wasn't stoped after stop command",false,this.recorder.getRecording());
+		assertEquals("An past was recorded after the stop command",1,this.recorder.getListMemento().size());
+	}
+
+	@Test
+	public void testRecord() {
+		//init memento
+		Recordable cut = new Cut(this.core, this.hmi, this.recorder);
+		Recordable paste = new Paste(this.core, this.hmi, this.recorder);
+		
+		//Beginning stop test
+		this.recorder.record(cut);
+		assertEquals("An cut was recorded before the start",0,this.recorder.getListMemento().size());
+		assertEquals("Recording was already started before start command",false,this.recorder.getRecording());
+		
+		this.recorder.start();
+		this.recorder.record(cut);
+		assertEquals("An cut wasn't recorded after the start like excepted",1,this.recorder.getListMemento().size());
+		assertEquals("Recording wasn't started after start command",true,this.recorder.getRecording());
+		
+		this.recorder.stop();
+		this.recorder.record(paste);
+		assertEquals("An paste was recorded after the stop command",1,this.recorder.getListMemento().size());
+		assertEquals("Recording wasn't stoped after stop command",false,this.recorder.getRecording());
 	}
 	
 	@Test
 	public void testReplay() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testRecord() {
-		fail("Not yet implemented");
+		Recordable paste = new Paste(this.core, this.hmi, this.recorder);
+		paste.setMemento();
+		String oldBuffer = this.core.getBuffer().getText();
+		String oldClipBoard = this.core.getClipBoard().getContent();
+		int[] oldSelection = this.core.getSelection().getSelection();
+		boolean execute = true;
+		
+		
+		this.recorder.start();
+		this.recorder.record(paste);
+		this.recorder.stop();
+		
+		if (oldSelection[0] > oldBuffer.length()) {
+			assertTrue("Start position is out of bounds", oldSelection[0] > oldBuffer.length());
+			execute = false;
+		} else if (oldSelection[0] < 0 ){
+			assertTrue("Start position is negative", oldSelection[0] < 0 );
+			execute = false;
+		}
+		// Test end position
+		if (oldSelection[1] < oldSelection[0]) {
+			assertTrue("End position is smaller than start position", oldSelection[1] < oldSelection[0]); 
+			execute = false;
+		} else if (oldSelection[1] > oldBuffer.length()) {
+			assertTrue("End position is out of bounds", oldSelection[1] > oldBuffer.length());
+			execute = false;
+		} 
+		
+		if (execute) {
+			this.recorder.replay();
+			assertEquals("The buffer isn't the expected result",oldBuffer.substring(0, oldSelection[0])+oldClipBoard+oldBuffer.substring(oldSelection[1]),this.core.getBuffer().getText());
+		}
 	}
 }
