@@ -30,8 +30,9 @@ public class Buffer {
 	
 	/**
 	 * Function used into insert function
-	 * append (insert in the end) screenIn text in buffer
+	 * insert screenIn text into the buffer between the start and end position
 	 * @param text String
+	 * @param pos int[] that contains the selection
 	 */
 	public void insert(String text,int[] pos) {
 		this.text.replace(pos[0], pos[1], text);
